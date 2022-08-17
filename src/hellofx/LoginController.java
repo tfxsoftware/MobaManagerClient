@@ -2,8 +2,7 @@ package hellofx;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
+
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -12,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -40,7 +40,9 @@ public class LoginController {
     void VerifyAccount(ActionEvent event) throws UnknownHostException, IOException {
         String client = emailfield.getText();
         String pw = pwdfield.getText();
-        String info = client + "/" + pw;
+        String id = "1";
+        String info = client + "/" + pw + "/" + id;
+
         try{
             Socket socket = new Socket("localhost", 4999);
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
@@ -49,9 +51,11 @@ public class LoginController {
             socket.close();
         }
             catch(Exception e) {
-                Stage offlineerror = new Stage();
-                offlineerror.setTitle("servidor offline");
-                offlineerror.show();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Connection Issues");
+                alert.setHeaderText("The server is offline!");
+                alert.setContentText("Please try again later!");
+                alert.showAndWait();
                 return;
             }
     
@@ -67,5 +71,8 @@ public class LoginController {
         NAStage.setResizable(false);
         NAStage.initModality(Modality.APPLICATION_MODAL);
         NAStage.show();
+        
     }
-}
+
+    }
+
